@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Notes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sofia&display=swap" rel="stylesheet">
+
+    <style>
+        /* General Reset */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        /* Body Styling */
+        
+        body {
+            font-family: "Sofia", sans-serif;
+            background: linear-gradient(135deg, #f8b5d1, #f5f1ff, #f9f3db);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            color: #333;
+        }
+        /* Background Animation */
+        
+        @keyframes backgroundAnimation {
+            0% {
+                background: linear-gradient(135deg, #f8b5d1, #f5f1ff, #f9f3db);
+            }
+            50% {
+                background: linear-gradient(135deg, #ffcccb, #ffb6c1, #ffeead);
+            }
+            100% {
+                background: linear-gradient(135deg, #f8b5d1, #f5f1ff, #f9f3db);
+            }
+        }
+        
+        body {
+            animation: backgroundAnimation 10s infinite alternate;
+        }
+        
+        .star {
+            position: absolute;
+            width: 20px;
+            /* Increased width */
+            height: 20px;
+            background-color: #fff;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            opacity: 0;
+            animation: twinkle 1.5s infinite ease-in-out;
+        }
+        /* Twinkle Animation */
+        
+        @keyframes twinkle {
+            0% {
+                opacity: 0;
+                transform: scale(0);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0);
+            }
+        }
+        /* Add Random Position and Animation Delay */
+        
+        .star:nth-child(odd) {
+            animation-delay: 0.5s;
+        }
+        
+        .star:nth-child(even) {
+            animation-delay: 1s;
+        }
+        /* Container for Cards */
+        
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            padding: 20px;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        /* Card Styling */
+        
+        .card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        /* Card Hover Effect */
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            /* Adding box shadow on hover */
+        }
+        /* Card Title */
+        
+        .card h3 {
+            font-family: 'Amatic SC', sans-serif;
+            font-size: 2rem;
+            color: #ff6f61;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        /* Card Content */
+        
+        .card p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #555;
+        }
+        /* Button Styling */
+        
+        .card .btn {
+            margin-top: 20px;
+            padding: 10px 25px;
+            background-color: #ff6f61;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        /* Card Hover Effect with Box Shadow */
+        /* Hover Effect for Button */
+        
+        .card .btn:hover {
+            background-color: #f4a3a2;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(255, 105, 97, 0.5);
+            /* Box shadow for the button on hover */
+        }
+        /* Add Sparkle Effect */
+        
+        @keyframes sparkle {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+        }
+        
+        .card::before {
+            content: '✨';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 2rem;
+            animation: sparkle 2s infinite alternate;
+        }
+        
+        .card::after {
+            content: '🎉';
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 2rem;
+            animation: sparkle 2s infinite alternate;
+        }
+        /* Love Message Popup */
+        
+        #popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 10;
+        }
+        
+        #popup button {
+            padding: 10px 20px;
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-top: 15px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        #popup button:hover {
+            transform: scale(1.1);
+        }
+        
+        @media screen and (max-width: 768px) {
+            /* For Tablets and Small Screens */
+            .send-love-btn {
+                font-size: 14px;
+                padding: 12px 24px;
+                bottom: 10px;
+                right: 10px;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            /* For Mobile Screens */
+            .send-love-btn {
+                font-size: 12px;
+                padding: 10px 20px;
+                bottom: 5px;
+                right: 5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Background Stars -->
+    <div class="star" style="top: 20%; left: 40%; animation-delay: 0s;"></div>
+    <div class="star" style="top: 90%; left: 50%; animation-delay: 0.5s;"></div>
+    <div class="star" style="top: 80%; left: 70%; animation-delay: 1s;"></div>
+    <div class="star" style="top: 30%; left: 5%; animation-delay: 1.5s;"></div>
+    <div class="star" style="top: 100%; left: 10%; animation-delay: 2s;"></div>
+    <div class="star" style="top: 5%; left: 10%; animation-delay: 2s;"></div>
+    <div class="star" style="bottom: 10%; left: 20%; animation-delay: 2s;"></div>
+    <div class="star" style="bottom: 10%; left: 10%; animation-delay: 2s;"></div>
+    <div class="star" style="bottom: 0%; left: 10%; animation-delay: 2s;"></div>
+    <div class="star" style="bottom: 10%; right: 5%; animation-delay: 2s;"></div>
+    <div class="star" style="bottom: 10%; right: 10%; animation-delay: 2s;"></div>
+    <div class="star" style="top: 5%; right: 10%; animation-delay: 2s;"></div>
+
+
+    <!-- Card Container -->
+    <div class="card-container">
+        <div class="card">
+            <h3>Happy Birthday!</h3>
+            <p>Wishing you a day filled with love, joy, and unforgettable memories!</p>
+            <button class="btn" onclick="showPopup('You are the light of my life! 💕')">Send Love</button>
+        </div>
+        <div class="card">
+            <h3>Cheers to You!</h3>
+            <p>May this special day be the start of a year full of happiness and blessings.</p>
+            <button class="btn" onclick="showPopup('You bring joy and happiness to everyone around you! 🎉')">Send Love</button>
+        </div>
+        <div class="card">
+            <h3>Celebrate Life!</h3>
+            <p>Here's to more laughter, adventures, and sweet moments together. Happy Birthday!</p>
+            <button class="btn" onclick="showPopup('Together, we create magic! ✨')">Send Love</button>
+        </div>
+        <div class="card">
+            <h3>To Many More!</h3>
+            <p>Let’s celebrate today with joy and gratitude for all the wonderful things you bring into our lives!</p>
+            <button class="btn" onclick="showPopup('Thank you for filling my life with happiness. 💖')">Send Love</button>
+        </div>
+        <div class="card">
+            <h3>Forever Grateful!</h3>
+            <p>Every day is a gift with you in it. Let’s cherish this special day forever.</p>
+            <button class="btn" onclick="showPopup('Your kindness and love make the world a better place. 🌟')">Send Love</button>
+        </div>
+        <div class="card">
+            <h3>Wishing You Peace</h3>
+            <p>May this year bring you all the peace and happiness you deserve.</p>
+            <button class="btn" onclick="showPopup('I wish you a lifetime of peace and joy. 🕊️')">Send Love</button>
+        </div>
+        <div class="card">
+            <h3>Stay Blessed!</h3>
+            <p>May your birthday be as wonderful as you are!</p>
+            <button class="btn" onclick="showPopup('You are truly a blessing to everyone around you! 🙏')">Send Love</button>
+        </div>
+        <div class="card">
+            <h3>Dream Big!</h3>
+            <p>Let this new year of life bring you closer to your dreams. Happy Birthday!</p>
+            <button class="btn" onclick="showPopup('May all your dreams come true! 🌠')">Send Love</button>
+        </div>
+    </div>
+
+    <!-- Popup Message -->
+    <div id="popup">
+        <p id="popup-message"></p>
+        <button onclick="closePopup()">Close</button>
+    </div>
+
+    <audio id="backgroundMusic" autoplay loop><source src="img/You Are My Soniya (From Kabhi Khushi Kabhie Gham) (Instrumental).mp3" type="audio/mpeg"></audio>
+
+
+    <script>
+        for (let i = 0; i < 100; i++) {
+            let star = document.createElement("div");
+            star.classList.add("star");
+            star.style.top = Math.random() * 100 + "%"; // Random top position
+            star.style.left = Math.random() * 100 + "%"; // Random left position
+            star.style.animationDelay = Math.random() * 2 + "s"; // Random animation delay
+            document.body.appendChild(star);
+        }
+
+        function showPopup(message) {
+            document.getElementById('popup-message').textContent = message;
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const audio = document.getElementById('backgroundMusic');
+            audio.muted = false; // Unmute audio if allowed by the browser
+        });
+    </script>
+
+</body>
+
+</html>
